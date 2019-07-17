@@ -80,10 +80,7 @@ blocks:
      g.addV('person').property('personId',{personId}).as("personA")
       .addV('account').property('accountId',{accountId}).as("account")
       .addE('ownsAccount').from("personA")
-      .addV('creditCard').property('cardNum',{cardNum}).as("card")
-      .addE('paysWith').from("personA")
-      .addV('device').property('deviceId',{deviceId}).as("device")
-      .addE('uses').from("personA")
+
   bindings:
     # We are following the same random ID creation as before, but with a *different* purpose
     # By using upserts and randomness, we are randomly connecting people to accounts
