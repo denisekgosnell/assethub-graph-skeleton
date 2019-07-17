@@ -1,0 +1,6 @@
+<!-- jsxgraph -->
+{{ $.Page.Scratch.Set "using-vega" "true" }}
+<div align="{{ if .Get "align" }}{{ .Get "align" }}{{ else }}center{{ end }}" class="vega-text"><pre>{{ string .Inner }}</pre></div>
+<!--<script src="{{ .Site.BaseURL }}/modules/flowchart/raphael.js"></script>-->
+<!--<script src="{{ .Site.BaseURL }}/modules/flowchart/flowchart-latest.js"></script>-->
+<script type="text/javascript" src="/modules/vega/inithook-vega.js"></script>

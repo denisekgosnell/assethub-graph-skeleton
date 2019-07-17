@@ -1,0 +1,4 @@
+<!-- jsxgraph -->
+{{ $.Page.Scratch.Set "using-viz" "true" }}
+<div align="{{ if .Get "align" }}{{ .Get "align" }}{{ else }}center{{ end }}" class="viz-text"><pre>{{ string .Inner }}</pre></div>
+<script type="text/javascript" src="/modules/viz/inithook-viz.js"></script>

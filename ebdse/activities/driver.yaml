@@ -1,0 +1,104 @@
+# ### 1. CREATE THE GRAPH #####
+# ./ebdse -vv run type=dsegraph yaml=paths tags=phase:create-graph cycles=1
+blocks:
+- name: create-graph
+  tags:
+   phase: create-graph
+  statements:
+   # variables listed as <<variable>> come from runebdse.sh;
+   # default setting follows the colon <<variable:default>>
+   # in the example below, the name of the graph will be nameofgraph=$graphname from runebdse.sh
+   # in the case the variable nameofgraph=$graphname is missing, the default is test
+   - system.graph('<<nameofgraph:test>>').ifNotExists().create()
+
+# ### 2. PRODUCTION MODE #####
+# ./ebdse -v run type=dsegraph yaml=paths graphname=paths tags=phase:prod-mode cycles=1
+- name: prod-mode
+  tags:
+   phase: prod-mode
+  statements:
+   - schema.config().option('graph.schema_mode').set('Production');
+
+# ### 3. CREATE THE SCHEMA #####
+# ./ebdse -vv run type=dsegraph yaml=paths graphname=paths tags=phase:graph-schema cycles=1
+- name: graph-schema
+  tags:
+   phase: graph-schema
+  statements:
+   - >-
+    schema.propertyKey('personId').Text().ifNotExists().create();
+    schema.propertyKey('accountId').Text().ifNotExists().create();
+
+    schema.vertexLabel('person').partitionKey('personId').ifNotExists().create();
+    schema.vertexLabel('account').partitionKey('accountId').properties('hasEvent').ifNotExists().create();
+
+    schema.edgeLabel('ownsAccount').multiple()
+          .connection('person', 'account').ifNotExists().create();
+
+# ### 4. CREATE PEOPLE VERTICES #####
+# Start graph construction by adding the people
+- name: insert-person-vertices
+  tags:
+   phase: insert-person-vertices
+  statements:
+    # Parameters in {} are Anchors. Each Anchor needs a binding to a generator.
+    # Generators are defined in the bindings section
+    - >-
+     g.addV('person').property('personId',{personId})
+
+  bindings:
+    # the following creates random IDs for a person in the numerical range (0, person). Default: (0, 500)
+    # the value that persists to DSE Graph has the structure "person-{}". Example: "person-0", "person-398", etc
+    personId: Shuffle(0L,<<person:500>>L,1); Template('person-{}',LongToString());
+
+# ### 5. CREATE ACCOUNT VERTICES #####
+# Adding accounts
+- name: insert-account-vertices
+  tags:
+   phase: insert-account-vertices
+  statements:
+    # Parameters in {} are Anchors.
+    # Each Anchor needs a binding to a generator.
+    # Generators are defined in the bindings section
+    - >-
+     g.addV('account').property('accountId',{accountId})
+
+  bindings:
+    # the following creates random IDs for an account in the numerical range (0, account). Default: (0, 250)
+    # the value that persists to DSE Graph has the structure "account-{}". Example: "account-0", "account-198", etc
+    accountId: Shuffle(0L,<<account:250>>L,1); Template('account-{}',LongToString());
+
+# ### 6. CREATE EDGES #####
+# Start graph construction by adding the person--owns-->account vertex-edge-vertex
+- name: add-ownsAccount-edge
+  tags:
+   phase: add-ownsAccount-edge
+  statements:
+    # Parameters in {} are Anchors. Each Anchor needs a binding to a generator.
+    # Generators are defined in the bindings section
+    - >-
+     g.addV('person').property('personId',{personId}).as("personA")
+      .addV('account').property('accountId',{accountId}).as("account")
+      .addE('ownsAccount').from("personA")
+      .addV('creditCard').property('cardNum',{cardNum}).as("card")
+      .addE('paysWith').from("personA")
+      .addV('device').property('deviceId',{deviceId}).as("device")
+      .addE('uses').from("personA")
+  bindings:
+    # We are following the same random ID creation as before, but with a *different* purpose
+    # By using upserts and randomness, we are randomly connecting people to accounts
+    # We have 500 people and 250 accounts. This means we have an expected average of 2 people owning an account
+    # The actual connections will follow a normal distribution with some accounts have zero edges, and some many more
+    # This will need to be considered as you create your example
+    # IF you need a controlled example to query, you will need to hard code that in a different phase
+    personId: Shuffle(0L,<<person:500>>L,1); Template('person-{}',LongToString());
+    accountId: Shuffle(0L,<<account:250>>L,1); Template('account-{}',LongToString());
+
+# ### 7. TURN ON ANALYTICS QUERIES #####
+# ./ebdse -v run type=dsegraph yaml=paths graphname=paths tags=phase:prod-mode cycles=1
+- name: queries-enabled
+  tags:
+   phase: queries-enabled
+  statements:
+  - >-
+   schema.config().option('graph.allow_scan').set('True');

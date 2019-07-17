@@ -1,0 +1,13 @@
+    
+    <!-- annotator.js -->
+    <script src="{{ .Site.BaseURL }}modules/annotatorjs1/jquery-2.2.4.js"></script>
+    <link href="{{ .Site.BaseURL }}modules/annotatorjs1/annotator.min.css" rel="stylesheet" />
+    <script src="{{ .Site.BaseURL }}modules/annotatorjs1/annotator-full.min.js"></script>
+    <script>
+        jQuery(function($) {
+            $('.article').annotator()
+                .annotator('addPlugin', 'Unsupported');
+        });
+    </script>
+    <!--                 .annotator('addPlugin', 'annotator-meltdown-zotero')
+-->

@@ -1,0 +1,14 @@
+    
+    <!-- annotator.js -->
+    <link href="{{ .Site.BaseURL }}/modules/annotatorjs/annotator.css" rel="stylesheet" />
+    <script src="{{ .Site.BaseURL }}/modules/annotatorjs/jquery-3.2.1.js"></script>
+    <script src="{{ .Site.BaseURL }}/modules/annotatorjs/annotator.js"></script>
+    <script>
+        var app = new annotator.App();
+        app.include(annotator.ui.main);
+        app
+            .start()
+            .then(function() {
+                app.annotations.load();
+            });
+    </script>

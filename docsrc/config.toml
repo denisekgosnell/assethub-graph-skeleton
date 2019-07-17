@@ -1,0 +1,35 @@
+languageCode = "en-us"
+title = "Mission Graph Demo"
+theme = "hugo-material-docs"
+metadataformat = "yaml"
+canonifyurls = true
+baseUrl = "/"
+
+disableKinds = ["taxonomy","taxonomyTerm"]
+
+[params]
+	description = "Mission Graph Demo"
+
+	logo = "images/asset-hub.svg"
+	favicon = "/images/asset-hub.png"
+
+[params.palette]
+    primary = "grey"
+    accent  = "teal"
+
+[params.font]
+    text = "Roboto"
+    code = "Roboto Mono"
+
+[blackfriday]
+	smartypants	= true
+	fractions = true
+	smartDashes = true
+	plainIDAnchors = true
+
+
+[[menu.main]]
+	name   = "Executive Summary"
+	url    = "/"
+	weight = 10
+
