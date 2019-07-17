@@ -30,7 +30,7 @@ blocks:
     schema.propertyKey('accountId').Text().ifNotExists().create();
 
     schema.vertexLabel('person').partitionKey('personId').ifNotExists().create();
-    schema.vertexLabel('account').partitionKey('accountId').properties('hasEvent').ifNotExists().create();
+    schema.vertexLabel('account').partitionKey('accountId').ifNotExists().create();
 
     schema.edgeLabel('ownsAccount').multiple()
           .connection('person', 'account').ifNotExists().create();
