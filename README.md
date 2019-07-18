@@ -3,8 +3,11 @@
 This is a skeleton repository for generating graph structured data with engine block and AssetHub at DataStax. There are four sections to this README:
 
 A. [A Quick `startup.order` refresher](#startup)
+
 B. [Files to Edit](#files)
+
 C. [Mapping Variables Between Files](#variables)
+
 D. [More Resources](#resources)
 
 ### <a name="startup"></a>A Quick `startup.order` refresher
@@ -60,6 +63,7 @@ The important piece here is `yaml=driver`. This indicates that the commands for 
 2. `tags=phase:create-graph`
 
 This indicates which phase to execute in `driver.yaml`. This maps to the definition in your `driver.yaml` that looks like:
+
 ```
 blocks:
 - name: create-graph
@@ -67,25 +71,26 @@ blocks:
    phase: create-graph
 ```
 
-3. nameofgraph=$graphname
+3. `nameofgraph=$graphname`
 
-This indicates which graph to alter. Above in runebdse.sh you set graphname=<<nameOfYourGraph>>
+This indicates which graph to alter. In `runebdse.sh`, you set this via `graphname=<<nameOfYourGraph>>`.
 
-4. host=$host
+4. `host=$host`
 
-This is configurable to be your local host or a node in your cluster.
-Best options:
-node0 (for working in a cluster)
-localhost (for working locally)
+This is configurable to be your local host or a node in your cluster. The best options:
 
-5. cycles=$person
+a. node0 (for working in a cluster)
 
-This indicates how many times the statement is supposed to be executed. In runebdse.sh, we defined person=500. This means that the statementn in driver.yaml under the phase take will be executed person number of times, or 500 times.
-For schema and set-up related statements, we want cycles=1
+b. localhost (for working locally)
 
-6. All other variable=$variable statements
+5. `cycles=$person`
 
-This is the key to passing variables over to ebdse executio statements. The variables you define in runebdse.sh can be passed as command line arguments with this syntax
+`cycles` indicates how many times the statement is to be executed. In `runebdse.sh`, we defined `person=500`. This means that the statementn in `driver.yaml` under the phase take will be executed `person` number of times, or `500` times.
+For schema and set-up related statements, we want `cycles=1`.
+
+6. All other `variable=$variable` statements
+
+This is the key to passing variables over to `ebdse` execution statements. The variables you define in `runebdse.sh` can be passed as command line arguments with this syntax
 
 ### <a name="resources"></a>More Resources
 
