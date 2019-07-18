@@ -1,55 +1,71 @@
 # assethub-graph-skeleton
 
-A skeleton repository for generating graph structured data with engine block and assethub at DataStax
+This is a skeleton repository for generating graph structured data with engine block and AssetHub at DataStax. There are four sections to this README:
 
-### Understanding .startup/startup.order
+A. [A Quick `startup.order` refresher](#startup)
+B. [Files to Edit](#files)
+C. [Mapping Variables Between Files](#variables)
+D. [More Resources](#resources)
 
-Required items:
-1. hugo
+### <a name="startup"></a>A Quick `startup.order` refresher
 
-This downloads and installs hugo. We use hugo for asset documentation on port :1313
+A quick refresher on understanding ``.startup/startup.order`
 
-2. nomnoml
+There are four required items for creating an asset in AssetHub that generates graph structured data.
 
-This starts the server for documentation
+1. `hugo`
 
-3. ebdserun
+This startup script downloads and installs `hugo`. AssetHub use hugo for asset documentation.
 
-This step starts the data insertion process by calling runebdse.sh
+2. `nomnoml`
 
-4. uploadNotebook
+The `nomnoml` startup script starts the server for documentation. Documentation is viewable on port `:1313`.
 
-uploadNotebook uses the Studio APIs and imports the NotebookSkeleton_2019-07-17_gosnell.studio-nb.tar to studio
+3. `ebdserun`
 
-### The files you need to primarily edit
+This startup script starts the data insertion process by calling `runebdse.sh`
+
+4. `uploadNotebook`
+
+The `uploadNotebook` startup script uses the Studio APIs and imports the `NotebookSkeleton.studio-nb.tar` to studio
+
+### <a name="files"></a>Files to Edit
 
 Most of your work will be in the following files:
 
-1. ebdse/runebdse.sh
+1. `ebdse/runebdse.sh`
 
 This file defines the size of your graph, different engine block variables, and engine block commands.
 
-2. ebdse/activities/driver.yaml
+2. `ebdse/activities/driver.yaml`
 
 This file contains the dse graph statements that engine block will execute.
 
-3. NotebookSkeleton_2019-07-17_gosnell.studio-nb.tar
+3. `NotebookSkeleton.studio-nb.tar`
 
 This an example notebook that posts at the end of the data generation process.
 
-4. docsrc/content/index.html
+4. `docsrc/content/index.html`
 
-This file is the asset specific documenation to view on port :1313
+This file is the asset specific documentation to view on port `:1313`.
 
-### Translating variables from runebdse.sh over to driver.yaml
+### <a name="variables"></a>Mapping Variables Between Files
 
-1. /tmp/ebdse/ebdse run yaml=driver
+The bulk of the work is understanding how to translate variables defined in `runebdse.sh` over to `driver.yaml`. This section gives you a quick tour of the ones you will use the most.
 
-This indicates that the commands for ebdse are in driver.yaml
+1. `/tmp/ebdse/ebdse run yaml=driver`
 
-2. tags=phase:create-graph
+The important piece here is `yaml=driver`. This indicates that the commands for `ebdse` are in `driver.yaml`
 
-This indicates which phase to execute in driver.yaml
+2. `tags=phase:create-graph`
+
+This indicates which phase to execute in `driver.yaml`. This maps to the definition in your `driver.yaml` that looks like:
+```
+blocks:
+- name: create-graph
+  tags:
+   phase: create-graph
+```
 
 3. nameofgraph=$graphname
 
@@ -71,3 +87,10 @@ For schema and set-up related statements, we want cycles=1
 
 This is the key to passing variables over to ebdse executio statements. The variables you define in runebdse.sh can be passed as command line arguments with this syntax
 
+### <a name="resources"></a>More Resources
+
+1. [Complex Graph Structure Example](https://github.com/denisekgosnell/paths-graph-example/blob/master/ebdse/activities/paths.yaml)
+
+2. [General EBDSE Documentation](https://powertools.datastax.com/ebdse/)
+
+3. [All Data Generation Functions](https://powertools.datastax.com/ebdse/functions/autodoc_reference/)
