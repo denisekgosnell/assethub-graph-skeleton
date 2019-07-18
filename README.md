@@ -25,10 +25,21 @@ uploadNotebook uses the Studio APIs and imports the NotebookSkeleton_2019-07-17_
 
 Most of your work will be in the following files:
 
-1. ebdse/runebdse
+1. ebdse/runebdse.sh
+
+This file defines the size of your graph, different engine block variables, and engine block commands.
+
 2. ebdse/activities/driver.yaml
+
+This file contains the dse graph statements that engine block will execute.
+
 3. NotebookSkeleton_2019-07-17_gosnell.studio-nb.tar
+
+This an example notebook that posts at the end of the data generation process.
+
 4. docsrc/content/index.html
+
+This file is the asset specific documenation to view on port :1313
 
 ### Translating variables from runebdse.sh over to driver.yaml
 
