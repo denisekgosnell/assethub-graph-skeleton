@@ -12,7 +12,7 @@ D. [More Resources](#resources)
 
 ### <a name="startup"></a>A Quick `startup.order` refresher
 
-A quick refresher on understanding ``.startup/startup.order`
+A quick refresher on understanding `.startup/startup.order`
 
 There are four required items for creating an asset in AssetHub that generates graph structured data.
 
